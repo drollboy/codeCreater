@@ -28,6 +28,7 @@ export interface GeneratedResult {
   schema: TableSchema[];
   explanation: string;
   projectSetupGuide: string; // Markdown formatted guide
+  apiDoc: string; // Markdown formatted API documentation
 }
 
 // 扩展用于历史记录存储的类型
@@ -43,6 +44,7 @@ export enum ViewMode {
   SCHEMA = 'SCHEMA',
   CODE = 'CODE',
   GUIDE = 'GUIDE',
+  API_DOC = 'API_DOC',
   DOCS = 'DOCS',
 }
 

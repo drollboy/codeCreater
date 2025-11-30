@@ -1,4 +1,5 @@
 
+
 import { GoogleGenAI, Type, Schema } from "@google/genai";
 import { GeneratedResult, TechStack, AIConfig } from "../types";
 
@@ -15,13 +16,14 @@ const getSystemInstruction = (stack: TechStack) => `
 1. **设计/修改** 数据库结构。
 2. 生成**核心**代码片段。
 3. 提供简要项目指南。
+4. **生成详细的 API 接口文档** (Markdown格式)，这是给前端开发人员看的，必须清晰。
 
 **核心交互逻辑（非常重要）：**
 你需要判断用户的意图是 **[需求修改]** 还是 **[纯咨询]**。
 
 **场景 A：需求修改**（例如："添加一个字段"、"生成代码"、"把 ID 改成 UUID"、"帮我写一个..."）
 - **Schema & Snippets**：必须返回更新后的完整结构或增量修改。对于**未修改**的代码片段，请在 \`code\` 字段中仅返回字符串 \`__KEEP__\`，系统会自动保留原代码。不要省略该对象。
-- **Explanation & Guide**：根据修改内容更新。
+- **Explanation, Guide, ApiDoc**：根据修改内容更新。
 
 **场景 B：纯咨询**（例如："这个 User 表是干嘛的？"、"如何部署项目？"、"解释一下这段代码"、"PostgreSQL 和 MySQL 区别？"）
 - **ChatResponse**：详细回答用户的问题。
@@ -29,11 +31,15 @@ const getSystemInstruction = (stack: TechStack) => `
 - **Snippets**：**必须返回空数组 []**（表示不修改）。
 - **Explanation**：返回字符串 \`__KEEP__\`。
 - **ProjectSetupGuide**：返回字符串 \`__KEEP__\`。
+- **ApiDoc**：返回字符串 \`__KEEP__\`。
 
 **关键约束（务必遵守）：**
 - **JSON 格式**：必须返回纯粹的 JSON，严禁使用 Markdown 代码块（\`\`\`json）。
 - **语言**：所有注释和说明必须是中文。
 - **结构完整**：在需求修改模式下，Schema 必须完整返回，不要省略。
+
+**API 文档格式要求 (Markdown)：**
+必须包含：接口 URL、请求方法 (GET/POST/PUT/DELETE)、请求参数/Body 示例、返回参数示例。
 
 **Schema 格式严格要求示例：**
 "schema": [
@@ -57,6 +63,7 @@ const getSystemInstruction = (stack: TechStack) => `
   "chatResponse": "简短回复",
   "explanation": "架构说明",
   "projectSetupGuide": "项目搭建指南(Markdown)",
+  "apiDoc": "API接口文档(Markdown)",
   "schema": [ ... ],
   "snippets": [ { "title": "...", "language": "...", "code": "...", "description": "..." } ]
 }
@@ -69,6 +76,7 @@ const RESPONSE_SCHEMA: Schema = {
     chatResponse: { type: Type.STRING, description: "给用户的简短回复" },
     explanation: { type: Type.STRING, description: "中文技术总结" },
     projectSetupGuide: { type: Type.STRING, description: "项目搭建指南(Markdown)" },
+    apiDoc: { type: Type.STRING, description: "API接口文档(Markdown)" },
     schema: {
       type: Type.ARRAY,
       items: {
@@ -106,7 +114,7 @@ const RESPONSE_SCHEMA: Schema = {
       }
     }
   },
-  required: ["snippets", "schema", "explanation", "projectSetupGuide", "chatResponse"]
+  required: ["snippets", "schema", "explanation", "projectSetupGuide", "apiDoc", "chatResponse"]
 };
 
 // --- Helper: Clean JSON Output ---
@@ -251,6 +259,11 @@ const mergeResults = (newRes: GeneratedResult, oldContext?: GeneratedResult): Ge
   // 4. Explanation 保护 (支持 __KEEP__ 标记)
   if ((!merged.explanation || merged.explanation === '__KEEP__') && oldContext.explanation) {
     merged.explanation = oldContext.explanation;
+  }
+  
+  // 5. ApiDoc 保护 (支持 __KEEP__ 标记)
+  if ((!merged.apiDoc || merged.apiDoc === '__KEEP__') && oldContext.apiDoc) {
+    merged.apiDoc = oldContext.apiDoc;
   }
 
   return merged;

@@ -1,16 +1,19 @@
+
+
 import React, { useState, useEffect, useRef } from 'react';
 import { generateBackend } from './services/geminiService';
 import { GeneratedResult, ViewMode, HistoryItem, Theme, Message, TechStack, AIConfig, ProviderConfigs } from './types';
 import { SchemaVisualizer } from './components/SchemaVisualizer';
 import { CodeExplorer } from './components/CodeExplorer';
 import { ProjectGuide } from './components/ProjectGuide';
+import { ApiDocViewer } from './components/ApiDocViewer';
 import { TechStackSelector } from './components/TechStackSelector';
 import { ModelSettings } from './components/ModelSettings';
 import { KnowledgeBase } from './components/KnowledgeBase';
 import { 
   Terminal, Code2, Database, Send, Sparkles, Loader2, PlayCircle, Download, 
   BookOpen, Clock, Trash2, Sun, Moon, Monitor, X, Upload, MessageSquare, Plus,
-  Settings, Library
+  Settings, Library, Webhook
 } from 'lucide-react';
 import { MarkdownRenderer } from './components/MarkdownRenderer';
 
@@ -293,6 +296,11 @@ const App: React.FC = () => {
     setResult({ ...result, projectSetupGuide: newGuide });
   };
 
+  const handleUpdateApiDoc = (newDoc: string) => {
+    if (!result) return;
+    setResult({ ...result, apiDoc: newDoc });
+  };
+
   const NavButton = ({ mode, icon: Icon, label, disabled = false }: any) => (
     <button 
       onClick={() => !disabled && setViewMode(mode)}
@@ -341,6 +349,7 @@ const App: React.FC = () => {
         <NavButton mode={ViewMode.PROMPT} icon={MessageSquare} label="AI 对话" />
         <NavButton mode={ViewMode.CODE} icon={Code2} label="代码片段" disabled={!result} />
         <NavButton mode={ViewMode.SCHEMA} icon={Database} label="架构视图" disabled={!result} />
+        <NavButton mode={ViewMode.API_DOC} icon={Webhook} label="接口文档" disabled={!result} />
         <NavButton mode={ViewMode.GUIDE} icon={BookOpen} label="项目指南" disabled={!result} />
         
         {/* Divider */}
@@ -547,6 +556,9 @@ const App: React.FC = () => {
           </div>
           <div className={`absolute inset-0 bg-slate-50 dark:bg-slate-950 transition-opacity duration-300 ${viewMode === ViewMode.GUIDE ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
              {result && <ProjectGuide guideContent={result.projectSetupGuide} onUpdateGuide={handleUpdateGuide}/>}
+          </div>
+          <div className={`absolute inset-0 bg-slate-50 dark:bg-slate-950 transition-opacity duration-300 ${viewMode === ViewMode.API_DOC ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
+             {result && <ApiDocViewer apiDoc={result.apiDoc} onUpdateApiDoc={handleUpdateApiDoc}/>}
           </div>
           <div className={`absolute inset-0 bg-slate-50 dark:bg-slate-950 transition-opacity duration-300 ${viewMode === ViewMode.DOCS ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
              <KnowledgeBase />
