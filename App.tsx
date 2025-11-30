@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import { generateBackend } from './services/geminiService';
 import { GeneratedResult, ViewMode, HistoryItem, Theme, Message, TechStack, AIConfig, ProviderConfigs } from './types';
@@ -24,9 +22,34 @@ const DEFAULT_STACK: TechStack = {
   orm: 'TypeORM'
 };
 
+// Helper function to safely get API Key in different environments
+const getApiKey = () => {
+  try {
+    // 1. Try Node.js process.env (Cloud/Playground)
+    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+      return process.env.API_KEY;
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  try {
+    // 2. Try Vite import.meta.env (Local Dev)
+    // @ts-ignore
+    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
+      // @ts-ignore
+      return import.meta.env.VITE_API_KEY;
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  return '';
+};
+
 const DEFAULT_AI_CONFIG: AIConfig = {
   provider: 'google',
-  apiKey: process.env.API_KEY || '',
+  apiKey: getApiKey(),
   modelName: 'gemini-2.5-flash'
 };
 
@@ -69,15 +92,17 @@ const App: React.FC = () => {
       try {
         const parsed = JSON.parse(savedConfig);
         // Ensure default key exists if present in env but not in local storage initially
-        if (!parsed.apiKey && process.env.API_KEY && parsed.provider === 'google') {
-           parsed.apiKey = process.env.API_KEY;
+        const envKey = getApiKey();
+        if (!parsed.apiKey && envKey && parsed.provider === 'google') {
+           parsed.apiKey = envKey;
         }
         setAiConfig(parsed);
       } catch (e) { console.error("Failed to parse AI config"); }
     } else {
         // If no saved config, use env var for Google default
-        if (process.env.API_KEY) {
-            setAiConfig(prev => ({ ...prev, apiKey: process.env.API_KEY }));
+        const envKey = getApiKey();
+        if (envKey) {
+            setAiConfig(prev => ({ ...prev, apiKey: envKey }));
         }
     }
   }, []);
