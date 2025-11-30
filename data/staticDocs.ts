@@ -255,13 +255,13 @@ sudo apt install sqlite3
 # Redis 本地安装指南
 
 ## Windows
-官方不支持 Windows，但可以使用微软维护的旧版本或 WSL2。
-**推荐使用 WSL2 (Ubuntu):**
+1. Windows 官方版本已停止维护，推荐使用 WSL2。
+2. 开启 WSL2 (Ubuntu) 后：
 \`\`\`bash
+sudo apt update
 sudo apt install redis-server
 sudo service redis-server start
 \`\`\`
-或者下载 [Memurai](https://www.memurai.com/) (Redis for Windows)。
 
 ## macOS
 \`\`\`bash
