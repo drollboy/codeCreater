@@ -1,0 +1,5 @@
+{
+  "name": "BackendForge",
+  "description": "面向前端开发者的 AI 后端代码片段生成器。快速生成 SQL、接口定义和业务逻辑代码片段。",
+  "requestFramePermissions": []
+}
