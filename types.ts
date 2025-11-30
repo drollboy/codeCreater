@@ -57,10 +57,10 @@ export type Theme = 'light' | 'dark' | 'system';
 
 // --- Tech Stack Definitions ---
 
-export type Language = 'TypeScript' | 'JavaScript' | 'Python' | 'Go' | 'Java' | 'PHP' | 'Rust';
-export type Database = 'PostgreSQL' | 'MySQL' | 'SQLite' | 'MongoDB' | 'MariaDB' | 'SQL Server';
-export type Framework = 'Express' | 'NestJS' | 'FastAPI' | 'Gin' | 'Django' | 'Flask' | 'Echo' | 'Spring Boot' | 'Laravel' | 'Koa' | 'Actix Web';
-export type ORM = 'Prisma' | 'TypeORM' | 'Sequelize' | 'SQLAlchemy' | 'GORM' | 'Mongoose' | 'None' | 'Hibernate' | 'Eloquent' | 'MikroORM' | 'Diesel';
+export type Language = 'TypeScript' | 'JavaScript' | 'Python' | 'Go' | 'Java' | 'PHP' | 'Rust' | 'C#' | 'Ruby';
+export type Database = 'PostgreSQL' | 'MySQL' | 'SQLite' | 'MongoDB' | 'MariaDB' | 'SQL Server' | 'Redis';
+export type Framework = 'Express' | 'NestJS' | 'FastAPI' | 'Gin' | 'Django' | 'Flask' | 'Echo' | 'Spring Boot' | 'Laravel' | 'Koa' | 'Actix Web' | 'Fastify' | 'Fiber' | 'ASP.NET Core' | 'Ruby on Rails';
+export type ORM = 'Prisma' | 'TypeORM' | 'Sequelize' | 'SQLAlchemy' | 'GORM' | 'Mongoose' | 'None' | 'Hibernate' | 'Eloquent' | 'MikroORM' | 'Diesel' | 'Entity Framework' | 'Active Record';
 
 export interface TechStack {
   name?: string; // For presets like "Node Fullstack"

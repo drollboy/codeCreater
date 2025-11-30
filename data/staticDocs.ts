@@ -220,6 +220,63 @@ docker run -d \\
 `
   },
   {
+    id: 'sqlite-tools',
+    title: 'SQLite 工具安装',
+    category: '数据库',
+    content: `
+# SQLite 命令行工具安装
+
+SQLite 是基于文件的数据库，通常不需要安装服务，但安装命令行工具 (CLI) 有助于查看数据。
+
+## Windows
+1. 访问 [SQLite 下载页](https://www.sqlite.org/download.html)。
+2. 下载 **sqlite-tools-win32-x86-*.zip**。
+3. 解压并将文件夹路径添加到系统环境变量 \`PATH\` 中。
+4. 验证：\`sqlite3\`
+
+## macOS
+macOS 通常预装了 sqlite3。
+如果没有：
+\`\`\`bash
+brew install sqlite
+\`\`\`
+
+## Linux
+\`\`\`bash
+sudo apt install sqlite3
+\`\`\`
+`
+  },
+  {
+    id: 'redis-native',
+    title: 'Redis 本地安装',
+    category: '数据库',
+    content: `
+# Redis 本地安装指南
+
+## Windows
+官方不支持 Windows，但可以使用微软维护的旧版本或 WSL2。
+**推荐使用 WSL2 (Ubuntu):**
+\`\`\`bash
+sudo apt install redis-server
+sudo service redis-server start
+\`\`\`
+或者下载 [Memurai](https://www.memurai.com/) (Redis for Windows)。
+
+## macOS
+\`\`\`bash
+brew install redis
+brew services start redis
+\`\`\`
+
+## Linux
+\`\`\`bash
+sudo apt install redis-server
+sudo systemctl start redis-server
+\`\`\`
+`
+  },
+  {
     id: 'mysql-native',
     title: 'MySQL 本地安装 (非Docker)',
     category: '数据库',

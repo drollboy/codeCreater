@@ -33,11 +33,11 @@ const PRESETS: TechStack[] = [
     orm: 'SQLAlchemy'
   },
   {
-    name: "Java Spring Boot",
-    language: 'Java',
-    framework: 'Spring Boot',
+    name: "Go 高并发",
+    language: 'Go',
+    framework: 'Gin',
     database: 'MySQL',
-    orm: 'Hibernate'
+    orm: 'GORM'
   }
 ];
 
@@ -105,6 +105,8 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({ selectedSt
                 <option value="Go">Go</option>
                 <option value="Java">Java</option>
                 <option value="PHP">PHP</option>
+                <option value="C#">C# (.NET)</option>
+                <option value="Ruby">Ruby</option>
                 <option value="Rust">Rust</option>
               </select>
             </div>
@@ -125,6 +127,7 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({ selectedSt
                      <option value="Express">Express</option>
                      <option value="NestJS">NestJS</option>
                      <option value="Koa">Koa</option>
+                     <option value="Fastify">Fastify</option>
                    </>
                  )}
                  {selectedStack.language === 'Python' && (
@@ -138,6 +141,7 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({ selectedSt
                    <>
                      <option value="Gin">Gin</option>
                      <option value="Echo">Echo</option>
+                     <option value="Fiber">Fiber</option>
                    </>
                  )}
                  {selectedStack.language === 'Java' && (
@@ -145,6 +149,12 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({ selectedSt
                  )}
                  {selectedStack.language === 'PHP' && (
                    <option value="Laravel">Laravel</option>
+                 )}
+                 {selectedStack.language === 'C#' && (
+                   <option value="ASP.NET Core">ASP.NET Core</option>
+                 )}
+                 {selectedStack.language === 'Ruby' && (
+                   <option value="Ruby on Rails">Ruby on Rails</option>
                  )}
                  {selectedStack.language === 'Rust' && (
                    <option value="Actix Web">Actix Web</option>
@@ -169,6 +179,7 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({ selectedSt
                 <option value="MariaDB">MariaDB</option>
                 <option value="SQL Server">SQL Server</option>
                 <option value="MongoDB">MongoDB</option>
+                <option value="Redis">Redis</option>
               </select>
             </div>
 
@@ -212,6 +223,16 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({ selectedSt
                 {/* PHP */}
                 {selectedStack.language === 'PHP' && (
                    <option value="Eloquent">Eloquent</option>
+                )}
+
+                 {/* C# */}
+                 {selectedStack.language === 'C#' && (
+                   <option value="Entity Framework">Entity Framework</option>
+                )}
+
+                {/* Ruby */}
+                {selectedStack.language === 'Ruby' && (
+                   <option value="Active Record">Active Record</option>
                 )}
 
                  {/* Rust */}
