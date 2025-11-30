@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Settings, Save, X, AlertCircle } from 'lucide-react';
+import { Settings, Save, X, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { AIConfig, AIProvider, ProviderConfigs } from '../types';
 
 interface ModelSettingsProps {
@@ -56,11 +56,13 @@ const DEFAULT_CONFIGS: ProviderConfigs = PROVIDERS.reduce((acc, p) => {
 export const ModelSettings: React.FC<ModelSettingsProps> = ({ isOpen, onClose, config, onSave }) => {
   const [activeProvider, setActiveProvider] = useState<AIProvider>(config.provider);
   const [localConfigs, setLocalConfigs] = useState<ProviderConfigs>(DEFAULT_CONFIGS);
+  const [showApiKey, setShowApiKey] = useState(false);
 
   // Initialize from LocalStorage or Defaults when opening
   useEffect(() => {
     if (isOpen) {
       setActiveProvider(config.provider);
+      setShowApiKey(false); // Reset visibility on open
       
       const savedConfigsStr = localStorage.getItem('backendforge_provider_configs');
       let mergedConfigs = { ...DEFAULT_CONFIGS };
@@ -149,13 +151,23 @@ export const ModelSettings: React.FC<ModelSettingsProps> = ({ isOpen, onClose, c
           <div className="space-y-4">
              <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">API Key</label>
-                <input 
-                  type="password"
-                  value={currentConfig.apiKey}
-                  onChange={(e) => updateCurrentConfig('apiKey', e.target.value)}
-                  placeholder="sk-..."
-                  className="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-                />
+                <div className="relative">
+                  <input 
+                    type={showApiKey ? "text" : "password"}
+                    value={currentConfig.apiKey}
+                    onChange={(e) => updateCurrentConfig('apiKey', e.target.value)}
+                    placeholder="sk-..."
+                    className="w-full p-3 pr-10 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowApiKey(!showApiKey)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus:outline-none"
+                    title={showApiKey ? "隐藏" : "显示"}
+                  >
+                    {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
              </div>
 
              {activeProvider !== 'google' && (
